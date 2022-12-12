@@ -1,23 +1,31 @@
-import {PerspectiveCamera, Stats} from "@react-three/drei";
+import {Physics} from "@react-three/cannon";
+import {Sky} from "@react-three/drei";
 import {Canvas} from "@react-three/fiber";
-import AnimatedBox from "../components/AnimatedBox";
-import CameraOrbitController from "../components/CameraOrbitController";
+import FPVCamera from "../components/FPVCamera";
+import Ground from "../components/Ground/Ground";
+import {Menu} from "../components/Menu/Menu";
+import {Cubes} from "../components/Object/Cube/Cubes";
+import Player from "../components/Player/Player";
+import TextureSelector from "../components/Texture/TextureSelector";
 
 export default function Home() {
-  const testing = true;
-
   return (
     <div className='container'>
       <Canvas>
-        <PerspectiveCamera makeDefault />
-        {testing ? <Stats /> : null}
-        {testing ? <axesHelper args={[2]} /> : null}
-        {testing ? <gridHelper args={[10, 10]} /> : null}
-        <CameraOrbitController />
-        <ambientLight intensity={0.1} />
-        <directionalLight color='red' position={[0, 0, 5]} />
-        <AnimatedBox isTesting={testing} />
+        <Sky sunPosition={[100, 100, 20]} />
+        <ambientLight intensity={0.5} />
+        <FPVCamera />
+        <Physics>
+          {/* 물리적인 영향을 받으니 Physics 내부에 추가해준다. */}
+          <Player />
+          <Cubes />
+          <Ground />
+        </Physics>
       </Canvas>
+      {/* 간단한 조준점을 추가하자 */}
+      <div className='absolute centered cursor'>+</div>
+      <TextureSelector />
+      <Menu />
     </div>
   );
 }

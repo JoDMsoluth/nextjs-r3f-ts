@@ -21,7 +21,7 @@ export default function AnimatedBox({isTesting}: Props) {
   return (
     <mesh ref={meshRef} scale={[0.5, 0.5, 0.5]}>
       <boxGeometry />
-      <meshBasicMaterial color='royalblue' />
+      <meshBasicMaterial color='blue' />
     </mesh>
   );
 }
