@@ -22,7 +22,7 @@ export default function Home() {
           <Player />
           <Cubes />
           <Suspense fallback={null}>
-            <Pterosaur position={[1, 1, 1]} />
+            <Pterosaur position={[1, 1, 1]} scale={0.1} receiveShadow />
           </Suspense>
           <Ground />
         </Physics>
