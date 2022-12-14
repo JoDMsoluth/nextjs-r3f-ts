@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import { Physics } from "@react-three/cannon";
 import { Sky } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
@@ -22,7 +23,48 @@ export default function Home() {
           <Player />
           <Cubes />
           <Suspense fallback={null}>
-            <Pterosaur position={[1, 1, 1]} scale={0.1} receiveShadow />
+            <Pterosaur
+              position={[0, 59, 0]}
+              scale={0.3}
+              receiveShadow
+              src={"/gltf/dsungaripterus/source/model.gltf"}
+              route={[
+                new THREE.Vector3(200, 99, -300),
+                new THREE.Vector3(-50, 99, 500),
+                new THREE.Vector3(-150, 99, -150),
+                new THREE.Vector3(150, 99, -150),
+
+                new THREE.Vector3(150, 99, 150),
+                new THREE.Vector3(-150, 99, 150),
+                new THREE.Vector3(-150, 99, -150),
+                new THREE.Vector3(150, 99, -150),
+
+                new THREE.Vector3(150, 99, 150),
+                new THREE.Vector3(-150, 99, 350),
+              ]}
+            />
+          </Suspense>
+          <Suspense fallback={null}>
+            <Pterosaur
+              position={[0, 100, 0]}
+              scale={0.3}
+              receiveShadow
+              src={"/gltf/geosternbergia/source/model.gltf"}
+              route={[
+                new THREE.Vector3(-150, 99, 150),
+                new THREE.Vector3(-150, 99, -150),
+                new THREE.Vector3(150, 99, 150),
+                new THREE.Vector3(150, 99, -150),
+
+                new THREE.Vector3(-50, 99, 500),
+                new THREE.Vector3(200, 99, -300),
+                new THREE.Vector3(150, 99, -150),
+                new THREE.Vector3(-150, 99, -150),
+
+                new THREE.Vector3(150, 99, 150),
+                new THREE.Vector3(-150, 99, 350),
+              ]}
+            />
           </Suspense>
           <Ground />
         </Physics>

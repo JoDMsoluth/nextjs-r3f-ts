@@ -1,32 +1,26 @@
 import * as THREE from "three";
-import {CatmullRomLine, useAnimations, useGLTF} from "@react-three/drei";
-import {useFrame} from "@react-three/fiber";
+import { CatmullRomLine, useAnimations, useGLTF } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 
-import {useEffect, useMemo, useRef, useState} from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-export default function Pterosaur(props: JSX.IntrinsicElements["mesh"]) {
+export default function Pterosaur({
+  src,
+  route,
+  ...props
+}: JSX.IntrinsicElements["mesh"] & { route: THREE.Vector3[]; src: string }) {
   const group = useRef<THREE.Group>(new THREE.Group());
-  const {scene, animations} = useGLTF("/gltf/dsungaripterus/source/model.gltf");
+  const { scene, animations } = useGLTF(src);
 
-  const {ref, actions, names} = useAnimations(animations);
+  const { ref, actions, names } = useAnimations(animations);
 
   const [index] = useState(1);
 
-  const path = useMemo(
-    () =>
-      new THREE.CatmullRomCurve3([
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(-8, 6, -5),
-        new THREE.Vector3(-2, 3, 7),
-        new THREE.Vector3(6, 4.5, 3),
-        new THREE.Vector3(0.5, 8, -1),
-      ]),
-    []
-  );
+  const path = useMemo(() => new THREE.CatmullRomCurve3(route), [route]);
 
   useFrame((state, delta) => {
-    const {clock} = state;
-    const time = clock.oldTime;
+    const { clock } = state;
+    const time = clock.oldTime * 0.00001;
 
     const currentPosition = new THREE.Vector3();
     const nextPosition = new THREE.Vector3();
@@ -35,6 +29,7 @@ export default function Pterosaur(props: JSX.IntrinsicElements["mesh"]) {
     path.getPointAt((time + 0.001) % 1, nextPosition);
 
     ref.current?.position.copy(currentPosition);
+
     ref.current?.lookAt(nextPosition.x, nextPosition.y, nextPosition.z);
   });
 
@@ -48,25 +43,13 @@ export default function Pterosaur(props: JSX.IntrinsicElements["mesh"]) {
 
   return (
     <>
-      <CatmullRomLine
-        points={[
-          new THREE.Vector3(0, 0, 0),
-          new THREE.Vector3(-8, 6, -5),
-          new THREE.Vector3(-2, 3, 7),
-          new THREE.Vector3(6, 4.5, 3),
-          new THREE.Vector3(0.5, 8, -1),
-        ]}
-        closed={false}
-        curveType={"centripetal"}
-        tension={0.5}
-        segments={20}
-        color={"red"}
-        lineWidth={3}
-        dashed={true}
-      />
-      <group ref={group} dispose={null}>
+      <group ref={group} rotation={[0, -Math.PI / 2, 0]}>
         <group ref={ref as any}>
-          <primitive object={scene} {...props} />
+          <primitive
+            object={scene}
+            {...props}
+            rotation={[0, -Math.PI / 2, 0]}
+          />
         </group>
       </group>
     </>

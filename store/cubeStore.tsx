@@ -1,10 +1,10 @@
-import {nanoid} from "nanoid";
+import { nanoid } from "nanoid";
 import create from "zustand";
-import {isClient} from "../utils/lib/browser";
+import { isClient } from "../utils/lib/browser";
 
 export interface CubeState {
   texture: string;
-  cubes: {key: string; pos: [number, number, number]; texture: string}[];
+  cubes: { key: string; pos: [number, number, number]; texture: string }[];
   addCube: (x: number, y: number, z: number) => void;
   removeCube: (x: number, y: number, z: number) => void;
   setTexture: (texture: string) => void;
@@ -13,13 +13,20 @@ export interface CubeState {
 }
 
 // + localStorege를 저장 및 가져오기 위해 선언
-const getLocalStorage = (key: string) => (isClient ? JSON.parse(window.localStorage.getItem(key)!) : null);
+const getLocalStorage = (key: string) =>
+  isClient ? JSON.parse(window.localStorage.getItem(key)!) : null;
 const setLocalStorage = (key: string, value: any) =>
   isClient ? window.localStorage.setItem(key, JSON.stringify(value)) : null;
 
 export const cubeStore = create<CubeState>()((set) => ({
   texture: "dirt",
-  cubes: [getLocalStorage("cubes") || []],
+  cubes: getLocalStorage("cubes") || [
+    {
+      key: nanoid(),
+      pos: [0, 0, 0],
+      texture: "glass",
+    },
+  ],
   addCube: (x, y, z) => {
     set((prev) => ({
       cubes: [
@@ -35,8 +42,10 @@ export const cubeStore = create<CubeState>()((set) => ({
   // removeCube는 position 값을 받아와 filter를 이용해 삭제 대상 위치값을 가진 cubes 항목을 걸러준다.
   removeCube: (x, y, z) => {
     set((prev: CubeState) => ({
-      cubes: prev.cubes.filter((cube) => {
-        const [X, Y, Z] = cube.pos;
+      cubes: prev.cubes?.filter((cube) => {
+        console.log("prev", prev);
+        console.log("cube", cube);
+        const [X, Y, Z] = cube?.pos;
         return X !== x || Y !== y || Z !== z;
       }),
     }));
