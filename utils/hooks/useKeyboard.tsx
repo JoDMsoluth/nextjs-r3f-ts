@@ -18,7 +18,7 @@ function actionByKey(key: string) {
   return keyActionMap[key];
 }
 
-export const useKeyboard = () => {
+export function useKeyboard () {
   // Key 입력에 대한 상태를 관리하기 위한 State
   const [actions, setActions] = useState({
     moveForward: false,
